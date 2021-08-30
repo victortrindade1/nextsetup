@@ -1,4 +1,6 @@
 const theme = {
+  borderRadius: '5px',
+
   colors: {
     background: '#121214',
     text: '#e1e1e6',

@@ -218,47 +218,6 @@ export default class MyDocument extends Document {
 }
 ```
 
-## src/pages/\_app.tsx
-
-Eu transformo em functional component pq assim posso tipar como `React.FC`, q dá menos trabalho do q tipar a função do jeito interface.
-
-```diff
-import React from 'react'
-import { AppProps } from 'next/app'
-
-+import GlobalStyle from '../styles/global'
-
--export default function MyApp({ Component, pageProps }) {
-+export default function MyApp({ Component, pageProps }: AppProps) {
--  return <Component {...pageProps} />
-+  return (
-+    <>
-+      <Component {...pageProps} />
-+      <GlobalStyle />
-+    </>
-+  )
-}
-```
-
-## src/styles/global.ts
-
-```js
-import { createGlobalStyle } from 'styled-components'
-
-export default createGlobalStyle`
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-
-  body {
-    background: #121214;
-    color: #e1e1e6;
-  }
-`
-```
-
 ## src/styles/theme.ts
 
 ```ts
@@ -273,33 +232,11 @@ const theme = {
 export default theme
 ```
 
-## src/pages/\_app.tsx
-
-```diff
-import React from 'react'
-import { AppProps } from 'next/app'
-+import { ThemeProvider } from 'styled-components'
-
-import GlobalStyle from '../styles/global'
-+import theme from '../styles/theme'
-
-export default function MyApp({ Component, pageProps }: AppProps) {
-  return (
--    <>
-+    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-      <GlobalStyle />
--    </>
-+    </ThemeProvider>
-  )
-}
-```
-
 ## src/styles/styled.d.ts
 
-Este é um arquivo de definição typescript. O nome não importa. Todos os arquivos terminados em `.d.ts` o TS reconhece como arquivos de definiçao TS.
+Este é um arquivo de definição de type. Sem ele o styled components não interage legal com TS pra criar um tema global.
 
-```js
+```ts
 import 'styled-components'
 
 import theme from './theme'
@@ -308,5 +245,50 @@ export type Theme = typeof theme
 
 declare module 'styled-component' {
   export interface DefaultTheme extends Theme {}
+}
+```
+
+## src/styles/global.ts
+
+```js
+import { createGlobalStyle } from 'styled-components'
+import { Theme } from './styled'
+
+export default createGlobalStyle <
+  { theme: Theme } >
+  `
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: ${props => props.theme.colors.background};
+    color: ${props => props.theme.colors.text};
+  }
+`
+```
+
+## src/pages/\_app.tsx
+
+```diff
+import React from 'react'
++import { AppProps } from 'next/app'
++import { ThemeProvider } from 'styled-components'
+
++import GlobalStyle from '../styles/global'
++import theme from '../styles/theme'
+
+-export default function MyApp({ Component, pageProps }) {
++export default function MyApp({ Component, pageProps }: AppProps) {
+  return (
+-    <>
++    <ThemeProvider theme={theme}>
+      <Component {...pageProps} />
++      <GlobalStyle />
+-    </>
++    </ThemeProvider>
+  )
 }
 ```
