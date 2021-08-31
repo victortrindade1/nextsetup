@@ -522,6 +522,11 @@ Vídeo q ensina: <https://www.youtube.com/watch?v=Pbs1VIwPoRA>
 
 ## SSG (Static Site Generation)
 
-O Next tem como conceito padrão renderizar a página no servidor (server side rendering). Da versão 9.4 pra cima, o Next começou a focar na geração de sites estáticos.
+O Next tem como conceito padrão renderizar a página no servidor (server side rendering). Da versão 9.4 pra cima, o Next começou a focar na geração de sites estáticos, incluindo algumas funcionalidades como:
+
+- Geração de páginas estáticas;
+- Revalidação dos dados;
+- Geração estática incremental;
+- Fallback para novos dados;
 
 Vídeo: <https://www.youtube.com/watch?v=u1kCtkVR7cE>
