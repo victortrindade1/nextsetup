@@ -292,3 +292,124 @@ import React from 'react'
   )
 }
 ```
+
+## Config head: Fonte Roboto, lang pt-br, charset, favicon
+
+Configurações no head da aplicação são feitas em `_document.tsx`. Ao criar o render() do \_document, eu preciso tb colocar as tags `<Main />` e `<NextScript />`, que serão, respectivamente, todo o DOM da página e os scripts q ficam no final.
+
+### src/pages/\_document.tsx - parte 2
+
+Não se preocupe com o `<link rel="preconnect">`. É coisa do google fonts.
+
+```diff
+import React from 'react'
+-import Document, { DocumentContext, DocumentInitialProps } from 'next/document'
++import Document, {
++  DocumentContext,
++  DocumentInitialProps,
++  Html,
++  Head,
++  Main,
++  NextScript
++} from 'next/document'
+import { ServerStyleSheet } from 'styled-components'
+
+export default class MyDocument extends Document {
+  static async getInitialProps(
+    ctx: DocumentContext
+  ): Promise<DocumentInitialProps> {
+    const sheet = new ServerStyleSheet()
+    const originalRenderPage = ctx.renderPage
+
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: App => props => sheet.collectStyles(<App {...props} />)
+        })
+
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        )
+      }
+    } finally {
+      sheet.seal()
+    }
+  }
+
++  render(): JSX.Element {
++    return (
++      <Html lang="pt">
++        <Head>
++          <meta charSet="utf-8" />
++
++          {/* Fonte Roboto */}
++          <link rel="preconnect" href="https://fonts.googleapis.com" />
++          <link
++            rel="preconnect"
++            href="https://fonts.gstatic.com"
++            crossOrigin="anonymous"
++          />
++          <link
++            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
++            rel="stylesheet"
++          />
++
++          {/* Favicon */}
++          <link rel="icon" href="https://rocketseat.com.br/favicon.ico" />
++        </Head>
++        <body>
++          <Main />
++          <NextScript />
++        </body>
++      </Html>
++    )
+  }
+}
+```
+
+#### .eslintrc.json - parte 2
+
+```diff
+{
+  "extends": [
+    "next/core-web-vitals",
+    "prettier",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
++  "globals": {
++    "JSX": true
++  }
+}
+```
+
+### src/styles/global.ts - parte 2
+
+```diff
+import { createGlobalStyle } from 'styled-components'
+import { Theme } from './styled'
+
+export default createGlobalStyle<{ theme: Theme }>`
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: ${props => props.theme.colors.background};
+    color: ${props => props.theme.colors.text};
++    font: 400 16px Roboto, sans-serif;
+  }
+`
+```
+
+## Importar imagens pro app
+
+Parei em 31:41.
