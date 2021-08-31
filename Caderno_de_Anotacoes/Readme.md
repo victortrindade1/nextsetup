@@ -519,3 +519,9 @@ export default Home
 O `swr` é uma lib criada pela Vercel, mas dá pra usar com React e RN tb. Ela é basicamente um gerenciador de cache de requests. Ela não substitui o axios, e sim se torna um _wrapper_ do axios (ou do fetch). Antes de mostrar a response, ela mostra o cache, e só depois a response. Veja o vídeo abaixo. Nele, tem tb aplicação com axios.
 
 Vídeo q ensina: <https://www.youtube.com/watch?v=Pbs1VIwPoRA>
+
+## SSG (Static Site Generation)
+
+O Next tem como conceito padrão renderizar a página no servidor (server side rendering). Da versão 9.4 pra cima, o Next começou a focar na geração de sites estáticos.
+
+Vídeo: <https://www.youtube.com/watch?v=u1kCtkVR7cE>
