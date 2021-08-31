@@ -410,6 +410,112 @@ export default createGlobalStyle<{ theme: Theme }>`
 `
 ```
 
-## Importar imagens pro app
+## Manipular imagens
 
-Parei em 31:41.
+O professor usa uma lib chamada `next-images`. Mas hj, existe o `next/image` q é nativo e performático.
+
+### src/pages/index.tsx - parte 2
+
+```diff
+import React from 'react'
+import type { NextPage } from 'next'
+import Head from 'next/head'
++import Image from 'next/image'
+
++import minhaLogoTeste from '../assets/vercel.svg'
+
+const Home: NextPage = () => {
+  return (
+    <div>
+      <Head>
+        <title>Create Next App</title>
+      </Head>
+
+      <main>
++        <Image src={minhaLogoTeste} alt="" width={100} height={50} />
+        <h1>Hellooooo</h1>
+      </main>
+    </div>
+  )
+}
+
+export default Home
+```
+
+## Next Bundle Analyser
+
+`yarn add @next/bundle-analyzer`
+
+É um plugin pro Next, q verifica por q q seu site está lento. Ele analisa o q do seu projeto pode estar pesado. O professor só comentou sobre, não usou.
+
+## Estilizando o app
+
+Se um arquivo em `pages` estiver sem `_` na frente,o Next sempre reconhece estes arquivos como páginas acessáveis. Por isto, não dá pra criar arquivos de style junto com os arquivos das pages. Por isso, vou criar a pasta pages dentro de `styles`, e lá ter os estilos de cada página.
+
+### src/styles/pages/Home.ts
+
+A página inicial tem q ter o nome `index.tsx`. Esta é a única referência style (Home.ts) com nome diferente da página (index.tsx). As outras páginas eu coloco o mesmo nome.
+
+```ts
+import styled from 'styled-components'
+
+export const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  h1 {
+    font-size: 54px;
+    color: ${props => props.theme.colors.primary};
+    margin-top: 40px;
+  }
+
+  p {
+    margin-top: 24px;
+    font-size: 24px;
+    line-height: 32px;
+  }
+`
+```
+
+### src/pages/index.tsx - parte 3
+
+```diff
+import React from 'react'
+import type { NextPage } from 'next'
+import Head from 'next/head'
+import Image from 'next/image'
+
+import minhaLogoTeste from '../assets/vercel.svg'
++import { Container } from '../styles/pages/Home'
+
+const Home: NextPage = () => {
+  return (
+-    <div>
++    <Container>
+      <Head>
+        <title>Create Next App</title>
+      </Head>
+
+-      <main>
+        <Image src={minhaLogoTeste} alt="" width={100} height={50} />
+        <h1>Hellooooo</h1>
++        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+-      </main>
+-    </div>
++    </Container>
+  )
+}
+
+export default Home
+```
+
+## SWR como wrapper do axios
+
+O `swr` é uma lib criada pela Vercel, mas dá pra usar com React e RN tb. Ela é basicamente um gerenciador de cache de requests. Ela não substitui o axios, e sim se torna um _wrapper_ do axios (ou do fetch). Antes de mostrar a response, ela mostra o cache, e só depois a response. Veja o vídeo abaixo. Nele, tem tb aplicação com axios.
+
+Vídeo q ensina: <https://www.youtube.com/watch?v=Pbs1VIwPoRA>
